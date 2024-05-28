@@ -1,7 +1,11 @@
-"use client"
-import { ColumnDef, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { StudentDetails } from "../../types/student.types";
-import { useGetStudentList } from "../../hooks/student.hooks";
+"use client";
+import {
+  ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { StudentDetails } from "../../../types/student.types";
+import { useGetStudentList } from "../../../hooks/student.hooks";
 import { useEffect, useMemo } from "react";
 import { DataTable } from "@/components/DataTable";
 import { useRouter } from "next/navigation";
@@ -39,39 +43,42 @@ const columns: ColumnDef<StudentDetails>[] = [
   },
 ];
 
-
 export default function Home({
-  searchParams
+  searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const router = useRouter();
-  const page = searchParams[ 'page_number'] ?? '1'
-  const limit = searchParams[ 'page_size'] ?? '10'
+  const page = searchParams["page_number"] ?? "1";
+  const limit = searchParams["page_size"] ?? "10";
   const name = searchParams["name"] ?? "";
   const age = searchParams["age"] ?? "";
 
-    useEffect(() => {
-      const url = new URL(window.location.href);
-      const params = new URLSearchParams(url.search);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
 
-      if (!params.has("page_number") || !params.has("page_size")) {
-        params.set("page_number", page as string);
-        params.set("page_size", limit as string);
-        router.push(`${url.pathname}?${params.toString()}`);
-      }
-    }, [page, limit, router]);
+    if (!params.has("page_number") || !params.has("page_size")) {
+      params.set("page_number", page as string);
+      params.set("page_size", limit as string);
+      router.push(`${url.pathname}?${params.toString()}`);
+    }
+  }, [page, limit, router]);
 
-  const { data } = useGetStudentList(page as string, limit as string, name as string, age as string);
+  const { data } = useGetStudentList(
+    page as string,
+    limit as string,
+    name as string,
+    age as string
+  );
 
-  const studentList = useMemo(() => data || [], [data])
+  const studentList = useMemo(() => data || [], [data]);
 
   const table = useReactTable<StudentDetails>({
     data: studentList,
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
 
   return (
     <div>
