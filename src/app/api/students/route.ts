@@ -4,13 +4,13 @@ import { and, ilike, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  try {
     const search = req.nextUrl.searchParams;
     const page = Number(search.get("page")) || 1;
     const pageSize = Number(search.get("limit")) || 10;
-    const name = search.get("name") ;
+    const name = search.get("name");
     const age = search.get("age");
 
+  try {
     const offset = (page - 1) * pageSize;
 
     const result = await db
